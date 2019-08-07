@@ -1,7 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const Data = require('../models/data');
+var Product = require('../models/data');
 
-/* GET users listing. */
+//load products on stuff page
 router.get('/stuff', (req, res, next)=>{
-  const datas =Dat
+  Product.find((err, docs)=>{
+    //set row size
+    var dataChunks = [];
+    var chunkSize = 3;
+    for (var i = 0; i <docs.length; i+=chunkSize){
+      dataChunks.push(docs.slice(i, i + chunkSize));
+    }
+    console.log(docs.length);
+    res.render('stuff',{ datas:docs});
+
+  });
+});
+
+module.exports = router;
