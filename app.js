@@ -4,7 +4,12 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-// const mongodb = require('mongodb');
+const passport =require('passport');
+const flash = require('connect-flash');
+const bcrypt = require('bcrypt');
+
+
+const session = require('express-session');
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/js_cart',{ useNewUrlParser: true });
@@ -17,10 +22,17 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: 'fatcat',
+ resave: false,
+  saveUninitialized: false}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 app.use('/',  require('./routes/index'));
-app.use('/users',require('./routes/users'));
 app.use('/products', require('./routes/products'));
 
 // catch 404 and forward to error handler

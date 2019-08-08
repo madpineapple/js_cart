@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-var Product = require('../models/data');
+const Product = require('../models/data');
+
 
 //load products on stuff page
 router.get('/stuff', (req, res, next)=>{
