@@ -13,7 +13,8 @@ const session = require('express-session');
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/js_cart',{ useNewUrlParser: true });
- // mongoose.connect('mongod://localhost:27017/js_cart', { useNewUrlParser: true }, function(err) { console.log("mongoDB connected", err); });
+require('./config/passport');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
