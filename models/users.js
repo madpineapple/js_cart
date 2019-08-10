@@ -15,8 +15,10 @@ userSchema.methods.encryptPassword = (password)=>{
 };
 
 //check if  passwords are the same
-userSchema.methods.validPassword = (password)=>{
+//for some reason it won't accept arrows as a function -\(..)/-
+userSchema.methods.validPassword = function(password){
   return bcrypt.compareSync(password, this.password);
 };
+
 
 module.exports = mongoose.model('User', userSchema);
