@@ -14,11 +14,21 @@ passport.deserializeUser((id, done)=> {
 });
 
 //check is user exists and create new user
-passport.use('local.login', new LocalStrategy({
+passport.use('local.register', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true
 }, (req, email, password, done)=> {
+  req.checkBody('email', 'Invalid Email').notEmpty().isEmail();
+  req.checkBody('password', 'Invalid Password').notEmpty().isLength({min:6});
+  const errors = req.validationErrors();
+  if(errors){
+    const messages = [];
+    errors.forEach((error)=>{
+      messages.push(error.msg);
+    });
+    return done(null, false, req.flash('error', messages));
+  }
   User.findOne({'email': email}, (err, user)=>{
     if (err){
 

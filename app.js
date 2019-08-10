@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const passport =require('passport');
 const flash = require('connect-flash');
 const bcrypt = require('bcrypt');
+const validator = require('express-validator');
 
 
 const session = require('express-session');
@@ -18,10 +19,10 @@ require('./config/passport');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(validator());
 app.use(cookieParser());
 app.use(session({secret: 'fatcat',
  resave: false,

@@ -13,14 +13,14 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET users listing. */
-router.get('/user/login', (req, res, next)=> {
+router.get('/user/register', (req, res, next)=> {
   const messages = req.flash('error');
-  res.render('user/login',{csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0});
+  res.render('user/register',{csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0});
 
 });
-router.post('/user/login', passport.authenticate('local.login',{
+router.post('/user/register', passport.authenticate('local.register',{
   successRedirect: '/user/profile',
-  failureRedirect: '/user/login',
+  failureRedirect: '/user/register',
   failureFlash: true
 }));
 router.get('/user/profile', (req, res, next)=>{
