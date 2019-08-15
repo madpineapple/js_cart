@@ -39,12 +39,23 @@ router.get('/add_to_cart/:id', function(req, res, next){
   });
 });
 
+//View cart route
 router.get('/view_cart', (req,res,next)=>{
   if(!req.session.cart){
     return res.render('view_cart', {products: null});
   }
   const cart = new Cart(req.session.cart);
   res.render('view_cart', {products: cart.generateArray(), totalPrice: cart.totalPrice});
+});
+
+//Checkout route
+router.get('/checkout', (req, res, next)=>{
+  //check to see if a shopping cart exists
+  if(!req.session.cart){
+      return res.redirect('/view_cart');
+  }
+  const cart = new Cart(req.session.cart);
+  return res.render('checkout',{total: cart.totalPrice});
 });
 
 
