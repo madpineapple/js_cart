@@ -6,7 +6,8 @@ const Cart = require('../models/cart')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Cart' });
+  const successMsg = req.flash('success')[0];
+  res.render('index', { title: 'Cart' ,successMsg: successMsg, noMessage: !successMsg});
 });
 
 //load products on stuff page
@@ -30,12 +31,12 @@ router.get('/add_to_cart/:id', function(req, res, next){
 
   Product.findById(productId, function(err, product){
     if (err){
-      return res.redirect('/');
+      return res.redirect('/stuff');
     }
     cart.add(product, product.id);
     req.session.cart = cart;
     console.log(req.session.cart);
-    res.redirect('/');
+    res.redirect('/stuff');
   });
 });
 
@@ -55,7 +56,36 @@ router.get('/checkout', (req, res, next)=>{
       return res.redirect('/view_cart');
   }
   const cart = new Cart(req.session.cart);
-  return res.render('checkout',{total: cart.totalPrice});
+  const errMsg = req.flash('error')[0];
+  return res.render('checkout',{total: cart.totalPrice, errMsg: errMsg, noErrors: !errMsg});
+});
+
+router.post('/checkout',(req, res, next)=>{
+  //check to see if a shopping cart exists
+  if(!req.session.cart){
+      return res.redirect('/view_cart');
+  }
+  const cart = new Cart(req.session.cart);
+  //copied from stripe api
+  const stripe = require("stripe")("HIDDEN");
+
+ stripe.charges.create({
+  amount: cart.totalPrice * 100,
+  currency: "usd",
+  source: req.body.stripeToken, // obtained with Stripe.js
+  description: "Charge for jenny.rosen@example.com"
+}, function(err, charge) {
+  // asynchronously called
+  if(err){
+    req.flash('error', err.message);
+    return res.redirect('/checkout');
+  }
+  req.flash('success', 'purchased!');
+  req.session.cart = null;
+  res.redirect('/');
+});
+
+
 });
 
 
