@@ -1,2 +1,23 @@
-<h1>Profile</h1>
-<a href='/user/logout'>logout</a>
+<div class="col">
+  <h1>Profile</h1>
+  <a href='/user/logout'>logout</a>
+  <hr>
+  <h2>My orders</h2>
+  {{# each orders}}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <!-- List group -->
+     <ul class="list-group">
+       {{#each this.items}}
+        <li class="list-group-item">
+          <span class="badge">{{ this.price}}</span>
+          {{ this.item.title }} |{{this.qty}} Units
+        </li>
+       {{/each}}
+     </ul>
+    </div>
+    <div class="panel-footer">{{ this.cart.totalPrice}}</div>
+  </div>
+  {{/each}}
+
+</div>

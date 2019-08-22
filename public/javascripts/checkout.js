@@ -1,3 +1,4 @@
+//Connect to stripe and checkout
 Stripe.setPublishableKey('HIDDEN');
 var $form=$('#checkout-form');
 

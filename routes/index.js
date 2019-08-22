@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/data');
-const Cart = require('../models/cart')
+const Cart = require('../models/cart');
+const Order = require('../models/order');
 
 
 /* GET home page. */
@@ -50,7 +51,7 @@ router.get('/view_cart', (req,res,next)=>{
 });
 
 //Checkout route
-router.get('/checkout', (req, res, next)=>{
+router.get('/checkout', isLoggedin, (req, res, next)=>{
   //check to see if a shopping cart exists
   if(!req.session.cart){
       return res.redirect('/view_cart');
@@ -60,7 +61,7 @@ router.get('/checkout', (req, res, next)=>{
   return res.render('checkout',{total: cart.totalPrice, errMsg: errMsg, noErrors: !errMsg});
 });
 
-router.post('/checkout',(req, res, next)=>{
+router.post('/checkout',isLoggedin,(req, res, next)=>{
   //check to see if a shopping cart exists
   if(!req.session.cart){
       return res.redirect('/view_cart');
@@ -80,13 +81,43 @@ router.post('/checkout',(req, res, next)=>{
     req.flash('error', err.message);
     return res.redirect('/checkout');
   }
-  req.flash('success', 'purchased!');
-  req.session.cart = null;
-  res.redirect('/');
-});
 
+  const order = new Order({
+    user: req.user,
+    cart: cart,
+    address: req.body.address,
+    name: req.body.name,
+    paymentId: charge.id
+  });
 
+  //save order in database
+  order.save((err, result)=>{
+    //process after succesful transaction
+    //Should install an if(err) statement at a later date
+    req.flash('success', 'purchased!');
+    req.session.cart = null;
+    res.redirect('/');
+    });
+  });
 });
 
 
 module.exports = router;
+
+//make sure users are authenticated before accessing checkout page
+function isLoggedin(req, res, next){
+  if (req.isAuthenticated()){
+    return next();
+  }
+  //save old Url
+  req.session.oldUrl = req.url;
+  res.redirect('/user/login');
+}
+
+//make sure users AREN'T logged in.
+function notLoggedin(req, res, next){
+  if (!req.isAuthenticated()){
+    return next();
+  }
+  res.redirect('/');
+}
