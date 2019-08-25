@@ -13,7 +13,7 @@ router.use(csrfProtection);
 //route to profile page
 router.get('/profile', isLoggedin, (req, res, next)=>{
   //query database
-  Order.find({user: req.user}, (err, orders)=>{
+  Order.find({user: req.user}, (err, orders , email)=>{
     if(err){
       return res.write("oops");
     }
@@ -23,7 +23,7 @@ router.get('/profile', isLoggedin, (req, res, next)=>{
       cart = new Cart(order.cart);
       order.items = cart.generateArray();
     });
-    res.render('profile',{ orders: orders });
+    res.render('profile',{ orders: orders, email: req.user.email });
   });
 });
 

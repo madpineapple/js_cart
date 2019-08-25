@@ -8,7 +8,7 @@ const Order = require('../models/order');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   const successMsg = req.flash('success')[0];
-  res.render('index', { title: 'Cart' ,successMsg: successMsg, noMessage: !successMsg});
+  res.render('index', { successMsg: successMsg, noMessage: !successMsg});
 });
 
 //load products on stuff page
