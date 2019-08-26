@@ -5,6 +5,7 @@ const Cart = require('../models/cart');
 const Order = require('../models/order');
 
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   const successMsg = req.flash('success')[0];
@@ -13,14 +14,18 @@ router.get('/', function(req, res, next) {
 
 //load products on stuff page
 router.get('/stuff', (req, res, next)=>{
+
   Product.find((err, docs)=>{
     //set row size
     var dataChunks = [];
     var chunkSize = 3;
+    const [currentPage, setCurrentPage]= useState(1);
+    const[itemsPerPage, setItemsPerPage]= useState(6);
     for (var i = 0; i <docs.length; i+=chunkSize){
       dataChunks.push(docs.slice(i, i + chunkSize));
     }
     console.log(docs.length);
+
     res.render('stuff',{ datas:docs});
 
   });
@@ -37,7 +42,7 @@ router.get('/add_to_cart/:id', function(req, res, next){
     cart.add(product, product.id);
     req.session.cart = cart;
     console.log(req.session.cart);
-    res.redirect('/stuff');
+    res.redirect('/view_cart');
   });
 });
 
