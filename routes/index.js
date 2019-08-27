@@ -15,21 +15,39 @@ router.get('/', function(req, res, next) {
 //load products on stuff page
 router.get('/stuff', (req, res, next)=>{
 
-  Product.find((err, docs)=>{
-    //set row size
+  Product.find((err, result)=>{
+    //rwo size variables
     var dataChunks = [];
-    var chunkSize = 3;
-    const [currentPage, setCurrentPage]= useState(1);
-    const[itemsPerPage, setItemsPerPage]= useState(6);
-    for (var i = 0; i <docs.length; i+=chunkSize){
-      dataChunks.push(docs.slice(i, i + chunkSize));
-    }
-    console.log(docs.length);
+    var chunkSize = 6;
 
-    res.render('stuff',{ datas:docs});
+      //paginate variables
+    const pageSize = 6; //how many results by page
+    const pageCount = Math.ceil(result.length/pageSize);
+    let currentPage = 1; //set current page
+    let resultList = [];
+
+   //insert into dataChucks array
+    for (var i = 0; i <result.length; i+=chunkSize){
+      dataChunks.push(result.slice(i, i + chunkSize));
+    }
+    //set current page if specifed as get variable (eg: /?page=2)
+if (typeof req.query.page !== 'undefined') {
+  currentPage = +req.query.page;
+}
+//show list of products
+resultList = dataChunks[+currentPage - 1];
+    console.log();
+
+    res.render('stuff',{ datas:resultList,
+      pageSize: pageSize,
+		  pageCount: pageCount,
+		  currentPage: currentPage
+    });
 
   });
 });
+
+
 router.get('/add_to_cart/:id', function(req, res, next){
   var productId = req.params.id;
   //create a new cart and check in session if old cart exits
