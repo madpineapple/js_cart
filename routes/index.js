@@ -3,9 +3,12 @@ const router = express.Router();
 const Product = require('../models/data');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
+const hbs = require('hbs');
 
+//handlebars-paginate helper
+const paginate = require('express-handlebars-paginate');
 
-
+hbs.registerHelper('paginate', paginate.createPagination);
 /* GET home page. */
 router.get('/', function(req, res, next) {
   const successMsg = req.flash('success')[0];
@@ -14,6 +17,7 @@ router.get('/', function(req, res, next) {
 
 //load products on stuff page
 router.get('/stuff', (req, res, next)=>{
+
 
   Product.find((err, result)=>{
     //rwo size variables
@@ -34,15 +38,17 @@ router.get('/stuff', (req, res, next)=>{
 if (typeof req.query.page !== 'undefined') {
   currentPage = +req.query.page;
 }
-//show list of products
+// //show list of products
 resultList = dataChunks[+currentPage - 1];
-    console.log();
+
 
     res.render('stuff',{ datas:resultList,
-      pageSize: pageSize,
-		  pageCount: pageCount,
-		  currentPage: currentPage
-    });
+      // Pagination data:
+    pagination: {
+      page: 1,       // The current page the user is on
+      limit: 2 // The total number of available pages
+    }
+  });
 
   });
 });

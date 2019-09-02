@@ -12,8 +12,17 @@
       {{/each}}
       <!-- pagination -->
       <div class="row">
-        <div class="col-sm-6 col-md-4"align="center" id ="product">
-        
+        <div class="col">
+          <div class="pagination pagination-centered">
+            <ul>
+              {{#paginate pagination limit= '2'}}
+                <li {{#if disabled}}class="disabled"{{/if}}><a href="?p={{1}}">First</a>First</li>
+              {{/paginate}}
+
+            </ul>
+          </div>
+
         </div>
+
       </div>
   </div>
