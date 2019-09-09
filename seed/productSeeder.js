@@ -5,41 +5,41 @@ mongoose.connect('mongodb://localhost:27017/js_cart',{ useNewUrlParser: true });
 
 const products = [
     new Product({
-    imagePath:'../public/images/drone_1.jpg',
+    imagePath:'/images/drone_1.jpg',
     title:'drone_1',
     description:"it flies",
     price:10.15
   }),
 
   new Product({
-  imagePath:'../public/images/drone_2.jpg',
-  title:'drone_1',
+  imagePath:'/images/drone_2.jpg',
+  title:'drone_2',
   description:"it flies",
-  price:10.15
+  price:10.11
 }),
   new Product({
-  imagePath:'../public/images/drone_3.jpg',
-  title:'drone_1',
+  imagePath:'/images/drone_3.jpg',
+  title:'drone_3',
   description:"it flies",
-  price:10.15
+  price:10.12
 }),
   new Product({
-  imagePath:'../public/images/drone_4.jpg',
-  title:'drone_1',
+  imagePath:'/images/drone_4.jpg',
+  title:'drone_4',
   description:"it flies",
-  price:10.15
+  price:10.13
 }),
   new Product({
-  imagePath:'../public/images/drone_5.jpg',
+  imagePath:'/images/drone_5.jpg',
   title:'drone_5',
   description:"it flies",
-  price:10.15
+  price:10.45
 }),
   new Product({
-  imagePath:'../public/images/drone_6.jpg',
+  imagePath:'/images/drone_6.jpg',
   title:'drone_6',
   description:"it flies",
-  price:10.15
+  price:10.65
   })
 ];
 

@@ -2,7 +2,7 @@
   <div class="row">
     {{# each datas}}
       <div class="col-sm-6 col-md-4" align="center" id ="product">
-        <img src="/images/drone_1.jpg" id="thumbnail" alt="">
+        <img src={{this.imagePath}} id="thumbnail" alt="">
 
           <h3>{{ this.title}}</h3>
           <p>{{ this.description}}</p>
